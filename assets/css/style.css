@@ -1,0 +1,154 @@
+
+@font-face {
+    font-family: 'MartianMono';
+    src: url("./fonts/MartianMono.ttf") format("opentype");
+}
+
+:root {
+    --white: #fff;
+    --black: #1D2130;
+    --fs-base: clamp(0.875rem, 0.825rem + 0.2vw, 1rem);
+}
+
+*,
+*:after,
+*:before {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    box-sizing: border-box;
+    text-decoration: none;
+}
+
+body {
+    font-family: 'MartianMono';
+    font-weight: 400;
+    font-size: var(--fs-base);
+    line-height: 24px;
+    width: 100vw !important;
+    overflow-x: hidden !important;
+    color: var(--white);
+}
+
+
+/* From Uiverse.io by imtausef */ 
+.btn-link {
+	position: absolute;
+	bottom: 100px;
+	left: 50%;
+	transform: translateX(-50%);
+	cursor: pointer;
+	font-size: 14px;
+	border-radius: 16px;
+	font-weight: 500;
+	border: none;
+	padding: 2px;
+	transition: all 0.3s ease;
+	z-index: 100;
+    display: none;
+    font-family: 'MartianMono';
+
+    &:hover {
+        /*background: radial-gradient(circle 80px at 80% -10%, #181b1b, #000);*/
+        transform: scale(0.98) translateX(-50%);
+    }
+
+    &::after {
+        content: "";
+        position: absolute;
+        width: 65%;
+        height: 60%;
+        border-radius: 120px;
+        top: 0;
+        right: 0;
+        box-shadow: 0 0 20px #ffffff38;
+        z-index: -1;
+        transition: box-shadow 0.3s;
+    }
+
+    &:hover::after {
+        box-shadow: 0 0 10px #ffffff18;
+    }
+
+    &:hover .inner {
+        background: radial-gradient(circle 80px at 80% -50%, #333333, #0f0f0f);
+    }
+
+    &:hover .inner::before {
+        opacity: 0;
+    }
+
+    .blob1 {
+        position: absolute;
+        width: 70px;
+        height: 100%;
+        border-radius: 16px;
+        bottom: 0;
+        left: 0;
+        background: radial-gradient(
+            circle 60px at 0% 100%,
+            #40a092,
+            #2C3E50,
+            transparent
+        );
+        box-shadow: -10px 10px 30px #0051ff2d;
+        transition: all 0.3s ease;
+    }
+
+    .inner {
+        padding: 14px 25px;
+        border-radius: 14px;
+        color: #fff;
+        z-index: 3;
+        position: relative;
+        background: radial-gradient(circle 80px at 80% -50%, #777777, #0f1111);
+        transition: all 0.3s ease;
+
+        &::before {
+            content: "";
+            width: 100%;
+            height: 100%;
+            left: 0;
+            top: 0;
+            border-radius: 14px;
+            background: radial-gradient(
+                circle 60px at 0% 100%,
+                #00e1ff1a,
+                #0000ff11,
+                transparent
+            );
+            position: absolute;
+            transition: opacity 0.3s;
+        }
+    }
+}
+
+/* Estilos para el div overlay */
+.overlay {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.4);
+    /* Color de fondo semi-transparente */
+    backdrop-filter: blur(4px);
+    z-index: 101;
+    max-height: 100vh;
+    overflow-y: auto;
+    padding-bottom: 6rem;
+    /* Asegura que el overlay esté por encima del contenido de atrás */
+}
+
+#start-button {
+    display: block;
+}
+
+#overlay {
+    position: fixed;
+    z-index: 100;
+    background: linear-gradient(90deg, rgba(67,3,96,1) 0%, rgba(0,1,54,1) 50%, rgba(67,3,96,1) 100%);
+    width: 100dvw;
+    height: 100dvh;
+}
