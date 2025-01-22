@@ -21,7 +21,7 @@
 
     <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
 
-    <a-entity mindar-image-target="targetIndex: 0" mytarget>
+    <a-entity mindar-image-target="targetIndex: 0" mytarget id="dukiTarget">
       <a-video src="#video" id="video-element" position="0 0 0" height="0.6" width="1"></a-video>
     </a-entity>
     <div id="overlay">
@@ -44,5 +44,25 @@
   </a-scene>
 
   <script src="assets/js/efecto.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      const dukiTarget = document.querySelector('#dukiTarget');
+
+      const lockEntity = (entity) => {
+        const object3D = entity.object3D;
+        object3D.matrixAutoUpdate = false; // Detiene la actualización automática de la matriz.
+      };
+
+      const disableTarget = (entity) => {
+        entity.removeAttribute('mindar-image-target'); // Elimina el atributo para evitar nuevas detecciones.
+      };
+
+      houseTarget.addEventListener('targetFound', () => {
+        lockEntity(dukiTarget);
+        disableTarget(dukiTarget);
+      });
+
+    });
+  </script>
 </body>
 </html>
