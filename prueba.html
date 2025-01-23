@@ -10,7 +10,7 @@
 </head>
 <body>
   <a-scene
-    mindar-image="imageTargetSrc: assets/img/targets.mind; filterMinCF:0.00001; filterBeta: 0.0001"
+    mindar-image="imageTargetSrc: assets/img/targets.mind; filterMinCF:0.0001; filterBeta: 0.001"
     color-space="sRGB"
     renderer="colorManagement: true, physicallyCorrectLights"
     vr-mode-ui="enabled: false"
@@ -28,12 +28,11 @@
         position="0 0 0"
         height="0.6"
         width="1"
-        static-video-clone
+        static-video
       ></a-video>
     </a-entity>
   </a-scene>
 
-  <script src="static-video-clone.js"></script>
+  <script src="static-video.js"></script>
 </body>
 </html>
-
