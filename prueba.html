@@ -1,15 +1,16 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
-  <!--Custom CSS-->
-	<link rel="stylesheet" href="assets/css/style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AR Static Video</title>
+  <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/hiukim/mind-ar-js@1.1.5/dist/mindar-image.prod.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/hiukim/mind-ar-js@1.1.5/dist/mindar-image-aframe.prod.js"></script>
 </head>
 <body>
-    <a-scene
-    mindar-image="imageTargetSrc: assets/img/targets.mind; filterMinCF:0.000; filterBeta: 0.00"
+  <a-scene
+    mindar-image="imageTargetSrc: assets/img/targets.mind; filterMinCF:0.0001; filterBeta: 0.001"
     color-space="sRGB"
     renderer="colorManagement: true, physicallyCorrectLights"
     vr-mode-ui="enabled: false"
@@ -18,61 +19,21 @@
     <a-assets>
       <video id="video" src="assets/img/video.mp4" preload="auto" muted playsinline></video>
     </a-assets>
-  
+
     <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
-  
+
     <a-entity mindar-image-target="targetIndex: 0">
       <a-video
         src="#video"
         position="0 0 0"
         height="0.6"
         width="1"
-        fixed-video
+        static-video-clone
       ></a-video>
     </a-entity>
   </a-scene>
-  
-  
-  <script>
-AFRAME.registerComponent("fixed-video", {
-  init: function () {
-    this.video = document.querySelector(this.el.getAttribute("src"))
-    this.el.sceneEl.addEventListener("arReady", this.startVideo.bind(this))
-    this.el.sceneEl.addEventListener("arError", this.stopVideo.bind(this))
-    this.el.sceneEl.addEventListener("targetFound", this.startVideo.bind(this))
-    this.el.sceneEl.addEventListener("targetLost", this.stopVideo.bind(this))
-  },
 
-  startVideo: function () {
-    if (this.video.paused) {
-      this.video.play()
-    }
-  },
-
-  stopVideo: function () {
-    if (!this.video.paused) {
-      this.video.pause()
-    }
-  },
-})
-AFRAME.registerComponent("play-on-target", {
-  init: function () {
-    this.video = this.el.getAttribute("src")
-    this.videoEl = document.querySelector(this.video)
-
-    this.el.sceneEl.addEventListener("targetFound", () => {
-      this.videoEl.play()
-    })
-
-    this.el.sceneEl.addEventListener("targetLost", () => {
-      this.videoEl.pause()
-    })
-  },
-})
-
-
-
-  </script>
-
+  <script src="static-video-clone.js"></script>
 </body>
 </html>
+
