@@ -27,11 +27,34 @@
         position="0 0 0"
         height="0.6"
         width="1"
-        play-on-target
+        fixed-video
       ></a-video>
     </a-entity>
   </a-scene>
+  
+  
   <script>
+AFRAME.registerComponent("fixed-video", {
+  init: function () {
+    this.video = document.querySelector(this.el.getAttribute("src"))
+    this.el.sceneEl.addEventListener("arReady", this.startVideo.bind(this))
+    this.el.sceneEl.addEventListener("arError", this.stopVideo.bind(this))
+    this.el.sceneEl.addEventListener("targetFound", this.startVideo.bind(this))
+    this.el.sceneEl.addEventListener("targetLost", this.stopVideo.bind(this))
+  },
+
+  startVideo: function () {
+    if (this.video.paused) {
+      this.video.play()
+    }
+  },
+
+  stopVideo: function () {
+    if (!this.video.paused) {
+      this.video.pause()
+    }
+  },
+})
 AFRAME.registerComponent("play-on-target", {
   init: function () {
     this.video = this.el.getAttribute("src")
@@ -46,6 +69,9 @@ AFRAME.registerComponent("play-on-target", {
     })
   },
 })
+
+
+
   </script>
 
 </body>
