@@ -44,7 +44,7 @@
   </a-scene>
 
   <script src="assets/js/efecto.js"></script>
-  <script>
+  <!-- <script>
     document.addEventListener("DOMContentLoaded", function() {
       const dukiTarget = document.querySelector('#dukiTarget');
 
@@ -62,6 +62,78 @@
         disableTarget(dukiTarget);
       });
 
+    });
+  </script> -->
+
+  <script>
+    AFRAME.registerComponent('ar-controller', {
+      schema: {
+        offsetX: {type: 'number', default: 0},
+        offsetY: {type: 'number', default: 0},
+        offsetZ: {type: 'number', default: -0.5}, // Acercamos el objeto por defecto
+        scanDuration: {type: 'number', default: 3000}
+      },
+
+      init: function() {
+        this.sceneEl = this.el.sceneEl;
+        this.arObject = document.querySelector('.ar-object');
+        this.camera = document.querySelector('a-camera');
+        this.isTargetFound = false;
+        this.scanTimer = null;
+        this.worldPosition = new THREE.Vector3();
+        this.worldQuaternion = new THREE.Quaternion();
+
+        this.sceneEl.addEventListener('targetFound', this.onTargetFound.bind(this));
+        this.sceneEl.addEventListener('targetLost', this.onTargetLost.bind(this));
+      },
+
+      onTargetFound: function() {
+        console.log('Target encontrado, iniciando escaneo...');
+        clearTimeout(this.scanTimer);
+        this.scanTimer = setTimeout(() => {
+          if (!this.isTargetFound) {
+            this.isTargetFound = true;
+            this.arObject.setAttribute('visible', 'true');
+            console.log('Escaneo completado, objeto fijado.');
+
+            this.arObject.object3D.getWorldPosition(this.worldPosition);
+            this.arObject.object3D.getWorldQuaternion(this.worldQuaternion);
+
+            const fixedObject = document.createElement('a-entity');
+            fixedObject.setAttribute('position', {
+              x: this.worldPosition.x + this.data.offsetX,
+              y: this.worldPosition.y + this.data.offsetY,
+              z: this.worldPosition.z + this.data.offsetZ
+            });
+            fixedObject.setAttribute('rotation', {
+              x: THREE.MathUtils.radToDeg(this.worldQuaternion.x),
+              y: THREE.MathUtils.radToDeg(this.worldQuaternion.y),
+              z: THREE.MathUtils.radToDeg(this.worldQuaternion.z)
+            });
+            
+            const clonedModel = this.arObject.cloneNode(true);
+            fixedObject.appendChild(clonedModel);
+
+            this.sceneEl.appendChild(fixedObject);
+
+            this.camera.setAttribute('look-controls', 'enabled', true);
+
+            this.sceneEl.systems['mindar-image-system'].arSystem.stopTracking();
+          }
+        }, this.data.scanDuration);
+      },
+
+      onTargetLost: function() {
+        if (!this.isTargetFound) {
+          console.log('Target perdido, reiniciando escaneo...');
+          clearTimeout(this.scanTimer);
+        }
+      }
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+      const sceneEl = document.querySelector('a-scene');
+      sceneEl.setAttribute('ar-controller', 'offsetZ: 0'); // Ajusta este valor según sea necesario
     });
   </script>
 </body>
