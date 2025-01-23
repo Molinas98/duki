@@ -21,9 +21,19 @@
 
     <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
 
-    <a-entity mindar-image-target="targetIndex: 0" mytarget id="dukiTarget">
+    <!-- <a-entity mindar-image-target="targetIndex: 0" mytarget id="dukiTarget">
       <a-video src="#video" id="video-element" position="0 0 0" height="0.6" width="1"></a-video>
-    </a-entity>
+    </a-entity> -->
+    <a-marker preset="hiro">
+      <a-video 
+        class="ar-object" 
+        src="#video" 
+        position="0 0 0" 
+        rotation="0 0 0" 
+        visible="false">
+      </a-video>
+    </a-marker>
+    
     <div id="overlay">
       <button id="start-button" class="btn-link">
         <div class="blob1"></div>
@@ -65,7 +75,7 @@
     });
   </script> -->
 
-  <script>
+  <!-- <script>
     AFRAME.registerComponent('ar-controller', {
       schema: {
         offsetX: {type: 'number', default: 0},
@@ -135,6 +145,49 @@
       const sceneEl = document.querySelector('a-scene');
       sceneEl.setAttribute('ar-controller', 'offsetZ: 0'); // Ajusta este valor según sea necesario
     });
+  </script> -->
+  <script>
+    AFRAME.registerComponent('ar-controller', {
+      schema: {
+        scanDuration: { type: 'number', default: 3000 } // Duración del escaneo
+      },
+  
+      init: function () {
+        this.sceneEl = this.el.sceneEl;
+        this.arObject = document.querySelector('.ar-object'); // Seleccionar el video u objeto AR
+        this.isTargetFound = false;
+        this.scanTimer = null;
+  
+        // Escuchar eventos de AR
+        this.sceneEl.addEventListener('targetFound', this.onTargetFound.bind(this));
+        this.sceneEl.addEventListener('targetLost', this.onTargetLost.bind(this));
+      },
+  
+      onTargetFound: function () {
+        console.log('Target encontrado, fijando objeto al target...');
+        clearTimeout(this.scanTimer);
+        this.scanTimer = setTimeout(() => {
+          if (!this.isTargetFound) {
+            this.isTargetFound = true;
+            this.arObject.setAttribute('visible', 'true');
+            console.log('Objeto ahora está pegado al target.');
+          }
+        }, this.data.scanDuration);
+      },
+  
+      onTargetLost: function () {
+        console.log('Target perdido, ocultando objeto...');
+        this.isTargetFound = false;
+        this.arObject.setAttribute('visible', 'false');
+        clearTimeout(this.scanTimer);
+      }
+    });
+  
+    document.addEventListener('DOMContentLoaded', function () {
+      const sceneEl = document.querySelector('a-scene');
+      sceneEl.setAttribute('ar-controller', 'scanDuration: 3000'); // Configuración personalizada
+    });
   </script>
+  
 </body>
 </html>
